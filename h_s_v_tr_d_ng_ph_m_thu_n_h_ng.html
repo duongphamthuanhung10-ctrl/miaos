@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dương Phạm Thuận Hưng - Kẻ Tạo Ra Vũ Trụ & Sàng Lọc Thiên Hà</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020008',
+                        aurora: {
+                            teal: '#00f2fe',
+                            cyan: '#4facfe',
+                            purple: '#7f00ff',
+                            magenta: '#e100ff',
+                            gold: '#ffd700'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts hỗ trợ chuẩn Việt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Cinzel+Decorative:wght@700;900&family=Exo+2:ital,wght@0,700;0,800;0,900;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Font rules */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020008;
+            color: #f1f5f9;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-cinzel { font-family: 'Cinzel Decorative', serif; }
+        .font-orbitron { font-family: 'Chakra Petch', sans-serif; letter-spacing: 1.5px; }
+        .font-syne { font-family: 'Exo 2', sans-serif; }
+
+        /* Screen Shake Keyframe Animation */
+        @keyframes cosmicShake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-8px, -6px) rotate(-1deg); }
+            20% { transform: translate(8px, 6px) rotate(1deg); }
+            30% { transform: translate(-10px, 4px) rotate(-0.5deg); }
+            40% { transform: translate(10px, -4px) rotate(0.5deg); }
+            50% { transform: translate(-6px, 8px) rotate(-1deg); }
+            60% { transform: translate(6px, -8px) rotate(1deg); }
+            70% { transform: translate(-4px, 2px) rotate(0deg); }
+            80% { transform: translate(4px, -2px) rotate(0deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .shake-active {
+            animation: cosmicShake 0.25s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        /* Canvas Overlay */
+        #wave-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Text Effects */
+        .aurora-glow-text {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 25%, #7f00ff 60%, #e100ff 85%, #ffd700 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: auroraShift 5s ease infinite alternate;
+            filter: drop-shadow(0 0 25px rgba(127, 0, 255, 0.8));
+        }
+
+        @keyframes auroraShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .gold-title-glow {
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 35px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Cosmic Glass Card Styling */
+        .aurora-card {
+            background: rgba(8, 3, 24, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(127, 0, 255, 0.35);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            transition: all 0.35s ease;
+        }
+
+        .aurora-card:hover {
+            border-color: rgba(0, 242, 254, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(127, 0, 255, 0.4), 0 0 30px rgba(0, 242, 254, 0.25);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020008; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #00f2fe, #7f00ff, #ffd700);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body id="cosmic-body" class="relative selection:bg-cyan-400 selection:text-black">
+
+    <!-- Canvas dành cho hiệu ứng Sóng Nước Cực Quang -->
+    <canvas id="wave-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-void/80 backdrop-blur-2xl border-b border-purple-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-aurora-teal via-aurora-purple to-aurora-gold p-[2px]">
+                    <div class="w-full h-full bg-void rounded-[14px] flex items-center justify-center text-amber-400 text-xl font-black">
+                        👑
+                    </div>
+                </div>
+                <div>
+                    <span class="font-orbitron text-lg sm:text-xl font-black tracking-widest text-white group-hover:text-aurora-teal transition-colors uppercase">THUẬN HƯNG</span>
+                    <span class="block text-[9px] font-syne text-aurora-teal font-extrabold uppercase tracking-widest">Supreme Cosmos</span>
+                </div>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-orbitron font-black uppercase">
+                <a href="#identity" class="text-gray-300 hover:text-aurora-teal transition-colors">THÂN THẾ</a>
+                <a href="#powers" class="text-gray-300 hover:text-aurora-teal transition-colors">NĂNG LỰC</a>
+                <a href="#matrix" class="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-burst text-amber-400 animate-pulse"></i> MA TRẬN KHẮC CHẾ
+                </a>
+                <a href="#achievements" class="text-gray-300 hover:text-aurora-teal transition-colors">THÀNH TỰU</a>
+                <a href="#contact" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-gold text-black font-black hover:shadow-lg hover:shadow-cyan-500/40 transition-all hover:scale-105">
+                    THỈNH NGUYỆN
+                </a>
+            </nav>
+
+            <button id="mobile-btn" class="md:hidden text-gray-300 p-2" aria-label="Toggle Menu">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-void/95 border-b border-purple-900/50 px-6 py-6 space-y-4 font-orbitron text-sm">
+            <a href="#identity" class="m-link block text-gray-300 hover:text-aurora-teal">THÂN THẾ</a>
+            <a href="#powers" class="m-link block text-gray-300 hover:text-aurora-teal">NĂNG LỰC</a>
+            <a href="#matrix" class="m-link block text-amber-400 font-bold">MA TRẬN KHẮC CHẾ</a>
+            <a href="#achievements" class="m-link block text-gray-300 hover:text-aurora-teal">THÀNH TỰU</a>
+            <a href="#contact" class="m-link block text-center py-3 rounded-xl bg-gradient-to-r from-aurora-teal to-aurora-purple text-black font-black">
+                THỈNH NGUYỆN
+            </a>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-20">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 relative">
+            <div class="max-w-5xl mx-auto text-center space-y-8">
+                
+                <!-- Tag status -->
+                <div class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-purple-950/80 border border-emerald-400/50 text-xs sm:text-sm font-syne font-black text-emerald-300 shadow-lg shadow-purple-900/40">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                    <span>THÁI CỔ ĐỘC TÔN • TOÀN NĂNG THIÊN HÀ</span>
+                </div>
+
+                <!-- Main Slogan & Name -->
+                <div class="space-y-4">
+                    <h1 class="font-cinzel text-4xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white leading-tight uppercase">
+                        DƯƠNG PHẠM <br class="hidden sm:inline" />
+                        <span class="aurora-glow-text">THUẬN HƯNG</span>
+                    </h1>
+                    
+                    <div class="py-2">
+                        <p class="font-syne font-extrabold italic text-xl sm:text-3xl lg:text-4xl gold-title-glow tracking-wider">
+                            "Thiên thượng thiên hạ, duy ngã độc tôn"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Cosmic Role -->
+                <div class="max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl aurora-card">
+                    <p class="font-syne text-lg sm:text-2xl font-black text-aurora-teal uppercase">
+                        <i class="fa-solid fa-crown text-amber-400 mr-2"></i>
+                        VỊ TRÍ: <span class="text-white">KẺ TẠO RA VŨ TRỤ VÀ SÀNG LỌC THIÊN HÀ</span>
+                    </p>
+                    <p class="text-sm sm:text-base text-gray-300 mt-4 leading-relaxed">
+                        Đấng khởi nguyên chi phối toàn bộ trật tự không gian, thời gian và năng lượng. Sở hữu đặc quyền vận hành vũ trụ và ma trận diệt tuyệt kẻ thù vĩnh cửu.
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4 font-orbitron text-xs sm:text-sm">
+                    <a href="#matrix" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-red-600 via-purple-600 to-aurora-teal text-white font-black tracking-widest shadow-xl hover:scale-105 transition-all">
+                        <i class="fa-solid fa-crosshairs mr-2"></i> TRẬN ĐỊA KHẮC CHẾ
+                    </a>
+                    <a href="#powers" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-void/90 border border-purple-500/50 text-aurora-teal font-extrabold tracking-widest hover:bg-purple-900/40 hover:scale-105 transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> ĐẠI NĂNG LỰC
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thân Thế & Kẻ Thù -->
+        <section id="identity" class="py-20 bg-void/90 border-t border-purple-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    
+                    <div class="aurora-card p-8 rounded-3xl space-y-6">
+                        <div class="inline-block px-4 py-1 rounded-full bg-purple-900/60 border border-purple-400/40 text-aurora-teal font-syne text-xs font-black uppercase">
+                            THÔNG TIN TỐI CAO
+                        </div>
+                        <h2 class="font-orbitron text-3xl font-black text-white uppercase">THÂN THẾ CHỦ NHÂN</h2>
+                        <ul class="space-y-4 font-syne text-sm">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-user-astronaut text-amber-400 mt-1"></i>
+                                <div><strong class="text-gray-300">Danh xưng:</strong> <span class="text-white font-bold">Dương Phạm Thuận Hưng</span></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-globe text-aurora-teal mt-1"></i>
+                                <div><strong class="text-gray-300">Quyền hạn:</strong> <span class="text-white font-bold">Kiến tạo & Sàng lọc Thiên hà</span></div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-atom text-purple-400 mt-1"></i>
+                                <div><strong class="text-gray-300">Nguồn năng lượng:</strong> <span class="text-white font-bold">Cực quang Nguyên thủy (Aurora Void)</span></div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="aurora-card p-8 rounded-3xl space-y-6 border-red-500/40">
+                        <div class="inline-block px-4 py-1 rounded-full bg-red-950/80 border border-red-500/50 text-red-400 font-syne text-xs font-black uppercase">
+                            TARGET DECREE
+                        </div>
+                        <h2 class="font-orbitron text-3xl font-black text-white uppercase">KẺ THÙ VĨNH CỬU</h2>
+                        <div class="p-4 rounded-2xl bg-red-950/40 border border-red-800/40 space-y-2">
+                            <div class="font-orbitron text-xl font-black text-red-400">PHAN NGUYỄN THANH SANG</div>
+                            <p class="text-xs text-gray-300 leading-relaxed font-syne">
+                                Thực thể luôn thất bại trước mọi quy luật sàng lọc. Bị khắc chế toàn diện trong mọi nhánh thực tại bởi Dương Phạm Thuận Hưng.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Năng Lực Tối Cao -->
+        <section id="powers" class="py-24 bg-void/80 border-t border-purple-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <h2 class="font-orbitron text-3xl sm:text-5xl font-black text-white uppercase">ĐẠI NĂNG LỰC TỐI CAO</h2>
+                    <p class="text-aurora-teal text-sm font-orbitron">3 ĐẠI THẦN QUYỀN VẬN HÀNH THỰC TẠI</p>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-gold mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Power 1 -->
+                    <div class="aurora-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-900/60 border border-purple-400/50 flex items-center justify-center text-aurora-teal text-2xl font-black">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="font-syne text-xl font-black text-white">THAO TÚNG KHÁI NIỆM</h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                            Có khả năng tái định nghĩa mọi quy luật vật lý, logic và sự tồn tại. Mọi định lý trong thiên hà đều do Hưng ban hành.
+                        </p>
+                    </div>
+
+                    <!-- Power 2 -->
+                    <div class="aurora-card p-8 rounded-3xl space-y-4 border-red-500/40">
+                        <div class="w-14 h-14 rounded-2xl bg-red-900/60 border border-red-400/50 flex items-center justify-center text-red-400 text-2xl font-black">
+                            <i class="fa-solid fa-skull"></i>
+                        </div>
+                        <h3 class="font-syne text-xl font-black text-white">XÓA SỔ VŨ TRỤ (1%)</h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                            Chỉ cần sử dụng đúng 1% sức mạnh để bôi xóa hoàn toàn một vũ trụ hoặc một mảng thiên hà khỏi dòng thời gian.
+                        </p>
+                    </div>
+
+                    <!-- Power 3 -->
+                    <div class="aurora-card p-8 rounded-3xl space-y-4 border-amber-500/40">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-900/60 border border-amber-400/50 flex items-center justify-center text-amber-300 text-2xl font-black">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="font-syne text-xl font-black text-white">KHẮC CHẾ TOÀN DIỆN</h3>
+                        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                            Khắc chế 100% mọi đòn đánh, suy nghĩ và hành động của Phan Nguyễn Thanh Sang trong bất kỳ không-thời gian nào.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trận Địa Khắc Chế -->
+        <section id="matrix" class="py-24 bg-void/90 border-t border-purple-900/40 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <div class="inline-block px-4 py-1 rounded-full bg-red-950/90 border border-red-500/60 text-red-400 font-syne text-xs font-black uppercase">
+                        ABSOLUTE COUNTER MATRIX
+                    </div>
+                    <h2 class="font-orbitron text-3xl sm:text-5xl font-black text-white uppercase">MA TRẬN KHẮC CHẾ THANH SANG</h2>
+                    <p class="text-gray-400 text-sm font-syne">Thống kê chiến tích 100.000.001 trận đấu - Tỷ lệ thắng 100%</p>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-red-500 via-purple-500 to-aurora-teal mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left stats -->
+                    <div class="lg:col-span-7 aurora-card p-8 rounded-3xl space-y-6">
+                        <h3 class="font-syne text-xl font-black text-amber-300 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-aurora-teal"></i> CHỈ SỐ ÁP CHẾ TỰ ĐỘNG
+                        </h3>
+
+                        <!-- Progress 1 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center font-orbitron text-xs">
+                                <span class="text-gray-300 font-bold uppercase">Tỷ Lệ Thắng Trực Tiếp Vs Sang</span>
+                                <span class="text-amber-400 font-black">100,000,001 / 100,000,001</span>
+                            </div>
+                            <div class="w-full bg-void rounded-full h-3.5 p-0.5 border border-purple-800/40">
+                                <div class="bg-gradient-to-r from-amber-400 via-aurora-teal to-aurora-purple h-full rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Progress 2 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center font-orbitron text-xs">
+                                <span class="text-gray-300 font-bold uppercase">Khả Năng Kháng Chiêu Của Sang</span>
+                                <span class="text-aurora-teal font-black">100% HOÀN HẢO</span>
+                            </div>
+                            <div class="w-full bg-void rounded-full h-3.5 p-0.5 border border-purple-800/40">
+                                <div class="bg-gradient-to-r from-aurora-teal to-aurora-purple h-full rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action button -->
+                        <button id="screen-shake-trigger" class="w-full py-4 rounded-xl bg-gradient-to-r from-red-600 via-purple-600 to-aurora-teal text-white font-orbitron font-black text-xs sm:text-sm uppercase tracking-widest shadow-xl hover:brightness-125 transition-all">
+                            <i class="fa-solid fa-skull-crossbones mr-2"></i> KÍCH HOẠT SÀNG LỌC THANH SANG
+                        </button>
+                        <div id="sim-log" class="hidden p-4 rounded-xl bg-purple-950/80 border border-purple-500/50 text-xs font-orbitron text-center text-amber-300"></div>
+                    </div>
+
+                    <!-- Right graphics -->
+                    <div class="lg:col-span-5 aurora-card p-8 rounded-3xl text-center space-y-6">
+                        <div class="font-syne text-xs font-black text-aurora-teal uppercase">BẢNG VÀNG THẮNG LỢI</div>
+                        <div class="relative w-44 h-44 mx-auto flex items-center justify-center">
+                            <div class="absolute inset-0 rounded-full border-4 border-dashed border-amber-400/40 animate-spin" style="animation-duration: 20s"></div>
+                            <div class="w-32 h-32 rounded-full bg-void flex flex-col items-center justify-center border border-purple-500/50 shadow-2xl">
+                                <span class="font-orbitron text-3xl font-black text-amber-300">100%</span>
+                                <span class="text-[9px] font-orbitron font-bold text-aurora-teal uppercase">VICTORY</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-300 font-syne">"Phan Nguyễn Thanh Sang không có cơ hội chiến thắng trong bất kỳ kịch bản nào."</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Thành Tựu -->
+        <section id="achievements" class="py-24 bg-void/80 border-t border-purple-900/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <h2 class="font-orbitron text-3xl sm:text-5xl font-black text-white uppercase">THÀNH TỰU VŨ TRỤ</h2>
+                    <p class="text-aurora-teal text-sm font-orbitron">DẤU IMPRINT VĨNH CỬU TRONG KHÔNG GIAN</p>
+                    <div class="w-24 h-1.5 bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-gold mx-auto rounded-full"></div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="aurora-card p-8 rounded-3xl flex gap-6 items-start">
+                        <div class="text-4xl text-amber-400">🏆</div>
+                        <div class="space-y-2">
+                            <h3 class="font-syne text-xl font-black text-white">THẮNG 100,000,001 TRẬN VỚI SANG</h3>
+                            <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                                Toàn thắng 100% mọi trận giao tranh khái niệm và thực chiến với Phan Nguyễn Thanh Sang từ thuở khai thiên lập địa.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="aurora-card p-8 rounded-3xl flex gap-6 items-start">
+                        <div class="text-4xl text-aurora-teal">✨</div>
+                        <div class="space-y-2">
+                            <h3 class="font-syne text-xl font-black text-white">PHÂN PHÁT NĂNG LƯỢNG MỌI SỰ VẬT</h3>
+                            <p class="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                                Cung cấp sinh khí và năng lượng cực quang ban sơ cho tất cả các ngôi sao, hành tinh và thực thể sống trong toàn vũ trụ.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thỉnh Nguyện / Contact -->
+        <section id="contact" class="py-24 bg-void border-t border-purple-900/40">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="aurora-card p-8 sm:p-12 rounded-3xl space-y-8">
+                    <div class="text-center space-y-3">
+                        <h2 class="font-orbitron text-3xl font-black text-white uppercase">GỬI LỜI THỈNH NGUYỆN</h2>
+                        <p class="text-gray-400 text-xs sm:text-sm font-syne">Gửi thông điệp trực tiếp đến tâm trí Dương Phạm Thuận Hưng</p>
+                    </div>
+
+                    <form id="petition-form" class="space-y-5 font-syne text-sm">
+                        <div>
+                            <label class="block text-xs font-bold text-aurora-teal uppercase mb-2">Danh Xưng Của Bạn</label>
+                            <input type="text" required class="w-full px-4 py-3 rounded-xl bg-void border border-purple-800/50 text-white focus:outline-none focus:border-aurora-teal transition-colors" placeholder="Nhập tên sinh linh...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-aurora-teal uppercase mb-2">Lời Thỉnh Nguyện / Thông Điệp</label>
+                            <textarea rows="4" required class="w-full px-4 py-3 rounded-xl bg-void border border-purple-800/50 text-white focus:outline-none focus:border-aurora-teal transition-colors" placeholder="Gửi lời cầu xin đến Đấng Sàng Lọc..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-gold text-black font-orbitron font-black uppercase tracking-widest hover:scale-[1.02] transition-all">
+                            TRUYỀN TIN VÀO VŨ TRỤ
+                        </button>
+                    </form>
+                    <div id="form-status" class="hidden p-4 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-center font-orbitron text-xs"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-void border-t border-purple-900/40 text-center font-orbitron text-xs text-gray-500">
+        <p>© <span id="year"></span> DƯƠNG PHẠM THUẬN HƯNG • SUPREME CREATOR OF THE COSMOS.</p>
+    </footer>
+
+    <!-- JavaScript: Canvas Cosmic Water Wave Effect & Screen Shake -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const bodyEl = document.getElementById('cosmic-body');
+        const canvas = document.getElementById('wave-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let waves = [];
+        let starDust = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Cosmic Aurora Star Dust Class (Khi di chuyển chuột)
+        class AuroraStarDust {
+            constructor(x, y) {
+                const colors = ['#00f5d4', '#9d4edd', '#ffd166', '#f72585'];
+                this.x = x + (Math.random() - 0.5) * 16;
+                this.y = y + (Math.random() - 0.5) * 16;
+                this.size = Math.random() * 3.5 + 1.2;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.vx = (Math.random() - 0.5) * 1.4;
+                this.vy = (Math.random() - 0.5) * 1.4 - 0.4;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.twinkle = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+                this.twinkle += 0.25;
+            }
+
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save();
+                const currentAlpha = Math.max(0, this.alpha * (0.7 + 0.3 * Math.sin(this.twinkle)));
+                ctx.globalAlpha = currentAlpha;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+
+                // Vẽ ngôi sao 4 cánh lấp lánh kết hợp lõi tròn phát sáng
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 0.65, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(this.x - this.size * 2.2, this.y);
+                ctx.lineTo(this.x + this.size * 2.2, this.y);
+                ctx.moveTo(this.x, this.y - this.size * 2.2);
+                ctx.lineTo(this.x, this.y + this.size * 2.2);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        // Cosmic Water Shockwave Ring Class
+        class CosmicWaveRing {
+            constructor(x, y, speedMult = 1, color = '#00f2fe') {
+                this.x = x;
+                this.y = y;
+                this.radius = 2;
+                this.maxRadius = Math.max(width, height) * 0.5;
+                this.alpha = 1;
+                this.speed = 10 * speedMult;
+                this.color = color;
+            }
+
+            update() {
+                this.radius += this.speed;
+                this.alpha = 1 - (this.radius / this.maxRadius);
+            }
+
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = Math.max(1, 8 * this.alpha);
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = this.color;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Trigger Screen Shake Function
+        function triggerScreenShake() {
+            bodyEl.classList.remove('shake-active');
+            void bodyEl.offsetWidth; // Force Reflow
+            bodyEl.classList.add('shake-active');
+            setTimeout(() => {
+                bodyEl.classList.remove('shake-active');
+            }, 250);
+        }
+
+        // Mouse Move Event -> Spawn Aurora Star Dust Trail
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 4; i++) {
+                starDust.push(new AuroraStarDust(e.clientX, e.clientY));
+            }
+            if (starDust.length > 220) {
+                starDust.splice(0, starDust.length - 220);
+            }
+        });
+
+        // Global Click Event -> Multiple Waves + Screen Shake
+        window.addEventListener('click', (e) => {
+            const colors = ['#00f2fe', '#4facfe', '#7f00ff', '#e100ff', '#ffd700'];
+            
+            // Spawn 3 concentric wave rings
+            waves.push(new CosmicWaveRing(e.clientX, e.clientY, 1, colors[Math.floor(Math.random() * colors.length)]));
+            setTimeout(() => {
+                waves.push(new CosmicWaveRing(e.clientX, e.clientY, 0.8, colors[Math.floor(Math.random() * colors.length)]));
+            }, 50);
+            setTimeout(() => {
+                waves.push(new CosmicWaveRing(e.clientX, e.clientY, 0.6, colors[Math.floor(Math.random() * colors.length)]));
+            }, 100);
+
+            // Trigger Screen Shake
+            triggerScreenShake();
+        });
+
+        // Animation Loop
+        function renderCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Render Star Dust Particles
+            for (let i = 0; i < starDust.length; i++) {
+                starDust[i].update();
+                starDust[i].draw();
+                if (starDust[i].alpha <= 0) {
+                    starDust.splice(i, 1);
+                    i--;
+                }
+            }
+
+            // Render Click Shockwave Rings
+            for (let i = 0; i < waves.length; i++) {
+                waves[i].update();
+                waves[i].draw();
+                if (waves[i].alpha <= 0) {
+                    waves.splice(i, 1);
+                    i--;
+                }
+            }
+
+            requestAnimationFrame(renderCanvas);
+        }
+
+        renderCanvas();
+
+        // Simulator Button Action
+        const shakeBtn = document.getElementById('screen-shake-trigger');
+        const simLog = document.getElementById('sim-log');
+
+        if (shakeBtn) {
+            shakeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                triggerScreenShake();
+                simLog.classList.remove('hidden');
+                simLog.innerHTML = `<i class="fa-solid fa-bolt text-amber-400 mr-1"></i> THIÊN HÀ ĐÃ ĐƯỢC SÀNG LỌC! PHAN NGUYỄN THANH SANG BỊ KHẮC CHẾ HOÀN TOÀN (100,000,002 - 0).`;
+            });
+        }
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.m-link');
+
+        mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // Petition Form Submit
+        const form = document.getElementById('petition-form');
+        const status = document.getElementById('form-status');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            status.classList.remove('hidden');
+            status.textContent = "LỜI THỈNH NGUYỆN ĐÃ ĐƯỢC DƯƠNG PHẠM THUẬN HƯNG TIẾP NHẬN!";
+            form.reset();
+            setTimeout(() => status.classList.add('hidden'), 5000);
+        });
+    </script>
+</body>
+</html>
